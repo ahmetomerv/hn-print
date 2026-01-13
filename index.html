@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker News Print</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="manifest" href="assets/site.webmanifest">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:wght@400;700&family=UnifrakturMaguntia&display=swap');
+        
+        .gothic-font {
+            font-family: 'UnifrakturMaguntia', cursive;
+        }
+        
+        .serif-font {
+            font-family: 'Old Standard TT', serif;
+        }
+        
+        body {
+            color: #1a1a1a;
+        }
+        
+        #newspaper {
+            width: 12in;
+            height: 18.2in;
+            max-width: 12in;
+            max-height: 18.2in;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        #articlesContainer {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .column-grid {
+            display: grid;
+            grid-template-rows: repeat(9, minmax(0, 1fr));
+            min-height: 0;
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .story-cell {
+            grid-row: span 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            min-width: 0;
+            max-width: 100%;
+            padding-bottom: 0.5rem;
+            box-sizing: border-box;
+        }
+        
+        .story-cell h3 {
+            min-height: 2.5rem;
+            width: 100%;
+            max-width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            box-sizing: border-box;
+        }
+        
+        @keyframes printReveal {
+            from {
+                clip-path: inset(0 0 100% 0);
+            }
+            to {
+                clip-path: inset(0 0 0 0);
+            }
+        }
+        
+        .newspaper-printing {
+            animation: printReveal 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
+            
+            .newspaper-container {
+                page-break-inside: avoid;
+            }
+            
+            #newspaper {
+                box-shadow: none !important;
+                width: 12in !important;
+                height: 18.2in !important;
+                max-width: 12in !important;
+                max-height: 18.2in !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                padding: 2rem !important;
+            }
+            
+            #articlesContainer {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 1.5rem !important;
+            }
+            
+            .column-grid {
+                display: grid !important;
+                grid-template-rows: repeat(9, minmax(0, 1fr)) !important;
+                height: 100% !important;
+            }
+            
+            .story-cell {
+                grid-row: span 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                min-height: 0 !important;
+                min-width: 0 !important;
+            }
+            
+            .story-cell h3 {
+                min-height: 2.5rem !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                box-sizing: border-box !important;
+            }
+            
+            .story-cell {
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            .column-grid {
+                min-width: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            #articlesContainer {
+                min-width: 0 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            
+            .line-clamp-2 {
+                display: -webkit-box !important;
+                -webkit-line-clamp: 2 !important;
+                line-clamp: 2 !important;
+                -webkit-box-orient: vertical !important;
+                overflow: hidden !important;
+            }
+            
+            @page {
+                margin: 0;
+                size: 12in 18.2in;
+            }
+            
+            a {
+                color: #000 !important;
+                text-decoration: underline !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-100 serif-font">
+    <!-- Acknowledgements Button -->
+    <button id="helpBtn" class="no-print text-2xl font-bold font-serif fixed top-4 w-12 h-12 p-4 left-4 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-full flex items-center justify-center shadow-md z-50 transition-colors">
+        ?
+    </button>
+    
+    <!-- Acknowledgements Modal -->
+    <div id="modal" class="no-print fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <div class="flex justify-between items-start mb-4">
+                <h2 class="text-2xl font-bold text-black">Important Acknowledgements</h2>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            </div>
+            <div>
+                <p class="text-gray-700 leading-relaxed">
+                    This project is not affiliated with HN or Y Combinator.
+                </p>
+                <br/>
+                <p class="text-gray-700 leading-relaxed">
+                    I have copied the idea from <a href="https://substackprint.com/" target="_blank" class="text-blue-500"><i>The Substack Print</i></a>, by <a href="https://substack.com/@rawandferal" target="_blank" class="text-blue-500"><i>danielle (𝓇𝒶𝓌 & 𝒻𝑒𝓇𝒶𝓁)</i></a>.
+                </p>
+                <br/>
+                <p class="text-gray-700 leading-relaxed">
+                    Made by <a href="https://ahmeto.com/" target="_blank" class="text-blue-500">Ahmet Ömer</a>
+                </p>
+                <br/>
+                <p class="text-gray-700 leading-relaxed">
+                    <a href="https://i.pinimg.com/736x/7e/b6/21/7eb62114d2135c9457c070f4b5952248.jpg" target="_blank" class="text-blue-500">Source</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Input Controls Section -->
+    <div class="no-print max-w-4xl mx-auto p-8">
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center gap-4 mb-2">
+                <img src="https://static.vecteezy.com/system/resources/previews/070/283/441/non_2x/hackernews-logo-hackernews-icon-in-transparent-background-free-png.png" alt="Hacker News Logo" class="h-14 w-14 object-contain" style="filter: brightness(0);">
+                <h1 class="gothic-font text-6xl text-black">Hacker News Print</h1>
+            </div>
+            <p class="text-lg text-gray-700 italic mb-6">turn hacker news stories into a printable newspaper</p>
+            <p id="headerDate" class="text-base text-gray-60 uppercase"></p>
+        </div>
+        
+        <div class="bg-white border-2 border-amber-800 rounded-lg p-6 shadow-lg">
+            <div class="flex flex-col gap-3">
+                <button 
+                    id="fetchBtn" 
+                    class="w-full bg-orange-600 hover:bg-orange-700 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                    Get Today's HN Newspaper
+                </button>
+                <button 
+                    id="printBtn" 
+                    class="hidden w-full border-2 border-amber-800 hover:bg-amber-50 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+                >
+                    Print/Save as PDF
+                </button>
+            </div>
+        </div>
+        
+        <div id="loading" class="hidden text-center py-8">
+            <p class="text-lg italic">Fetching stories...</p>
+        </div>
+        
+        <div id="error" class="hidden text-center py-8 text-red-600">
+            <p class="text-lg">Error loading stories. Please try again.</p>
+        </div>
+    </div>
+    
+    <!-- Newspaper Output Section -->
+    <div id="newspaper" class="hidden max-w-5xl mx-auto bg-white p-8 shadow-lg mb-16 pb-8">
+        <!-- Masthead -->
+        <div class="border-b-2 border-black mb-6 pb-4">
+            <div class="flex justify-between items-start mb-2">
+                <div class="text-sm serif-font" id="volume">VOL. I</div>
+                <div class="text-center flex-1">
+                    <h2 class="gothic-font text-5xl text-black mb-1" id="newspaperTitle">HACKER NEWS</h2>
+                    <p class="text-sm italic text-gray-600" id="newspaperSubtitle">hacker news print</p>
+                </div>
+                <div class="text-sm serif-font text-right" id="established">EST. 2025</div>
+            </div>
+            <div class="text-center text-sm serif-font" id="date"></div>
+        </div>
+        
+        <!-- Top Story Container -->
+        <div id="topStoryContainer"></div>
+        
+        <!-- Articles Container - 3 columns -->
+        <div id="articlesContainer" class="grid grid-cols-3 gap-6 text-sm leading-relaxed">
+            <!-- Articles will be inserted here -->
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
